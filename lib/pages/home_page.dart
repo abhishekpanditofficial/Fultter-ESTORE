@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:test_project/models/catalog.dart';
-import 'package:test_project/widgets/drawer.dart';
-import 'package:test_project/widgets/item_widget.dart';
+import 'package:test_project/utils/routes.dart';
+import 'package:test_project/widgets/home_widgets/catalog_header.dart';
+import 'package:test_project/widgets/home_widgets/catalog_list.dart';
+import 'package:test_project/widgets/themes.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -36,58 +40,39 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_const_declarations
-   
     // final dummyList = List.generate(20, (index) => CatalogModel.items[0]);
 
     return Scaffold(
-        appBar: AppBar(
-          // ignore: prefer_const_constructors
-          title: Text("Catalog App", style: TextStyle(color: Colors.black),)
-        ),
-        // ignore: avoid_unnecessary_containers
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: CatalogModel.items != null && CatalogModel.items.isNotEmpty ?  GridView.builder(
-            // ignore: prefer_const_constructors
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 16, crossAxisSpacing: 16),
-            itemBuilder: (context, index) {
-              final item = CatalogModel.items[index];
-              return Card(
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                child: GridTile(
-                  header: Container(
-                    // ignore: prefer_const_constructors
-                    padding: EdgeInsets.all(12),
-                    // ignore: prefer_const_constructors
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple
-                    ),
-                    // ignore: prefer_const_constructors
-                    child: Text(item.name, style: TextStyle(color: Colors.white),)
-                    ),
-                  footer: Container(
-                    // ignore: prefer_const_constructors
-                    padding: EdgeInsets.all(12),
-                    decoration: const BoxDecoration(
-                      color: Colors.white
-                    ),
-                    child: Text("\$${item.price.toString()}", style: const TextStyle(color: Colors.deepPurple),)
-                    ),
-                  child: Image.network(item.image, fit: BoxFit.contain,)
-                  ),
-                );
-            },
-            itemCount: CatalogModel.items.length,
-            ) 
-          : const Center(child: CircularProgressIndicator(),),
-        ),
-        // ignore: prefer_const_constructors
-        drawer: MyDrawer(), 
+      backgroundColor: context.canvasColor, //Theme.of(context).cardColor
+      floatingActionButton: FloatingActionButton(
+      onPressed: () => Navigator.pushNamed(context, MyRoutes.cartPage), 
+      backgroundColor: context.theme.buttonColor,
+      child: Icon(CupertinoIcons.cart, color: Colors.white,),
+      ),
+        body: SafeArea(
+          child: Container(
+            padding: Vx.m32,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CatalogHeader(),
+                if(CatalogModel.items != null && CatalogModel.items.isNotEmpty)
+                  const CatalogList().py16().expand()
+                else
+                  CircularProgressIndicator().centered().py16().expand(),
+              ],
+              ),
+          ),
+        )
       );
   }
 }
+
+
+
+
+
+
 
 // ListView.builder(
 //             itemCount: CatalogModel.items.length,

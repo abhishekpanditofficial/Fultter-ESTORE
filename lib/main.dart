@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:test_project/pages/cart_page.dart';
 import 'package:test_project/pages/home_page.dart';
 import 'package:test_project/pages/login_page.dart';
 import 'package:test_project/utils/routes.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
     num days =30;
 
     return MaterialApp(
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       theme: MyTheme.lightTheme(context),
       darkTheme: MyTheme.darkTheme(context),
       debugShowCheckedModeBanner: false,
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "/":(context) => LoginPage(),
         MyRoutes.homeRoute :(context) => HomePage(),
-        MyRoutes.loginRoute :(context) => LoginPage()
+        MyRoutes.loginRoute :(context) => LoginPage(),
+        MyRoutes.cartPage : (context) => CartPage()
       },
     );
   }
