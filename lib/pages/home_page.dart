@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:test_project/models/catalog.dart';
 import 'package:test_project/utils/routes.dart';
+import 'package:test_project/widgets/drawer.dart';
 import 'package:test_project/widgets/home_widgets/catalog_header.dart';
 import 'package:test_project/widgets/home_widgets/catalog_list.dart';
 import 'package:test_project/widgets/themes.dart';
