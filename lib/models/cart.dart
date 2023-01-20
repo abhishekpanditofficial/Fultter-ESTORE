@@ -1,12 +1,15 @@
+import 'package:test_project/core/store.dart';
 import 'package:test_project/models/catalog.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class CartModel {
 
-  static final cartModel = CartModel._internal();
+ // removing singleton, because we are using Vx store.
+  // static final cartModel = CartModel._internal();
 
-  CartModel._internal();
+  // CartModel._internal();
 
-  factory CartModel() => cartModel;
+  // factory CartModel() => cartModel;
   
   // catalog field
   late CatalogModel _catalog;
@@ -39,4 +42,27 @@ class CartModel {
   void remove(Item item) {
     _itemIds.remove(item.id);
   }
+}
+
+
+class AddMutation extends VxMutation<MyStore> {
+  final Item item;
+
+  AddMutation(this.item);
+  @override
+  perform() {
+    store?.cart._itemIds.add(item.id);
+  }
+
+}
+
+class RemoveMutation extends VxMutation<MyStore> {
+  final Item item;
+
+  RemoveMutation(this.item);
+  @override
+  perform() {
+    store?.cart._itemIds.remove(item.id);
+  }
+
 }

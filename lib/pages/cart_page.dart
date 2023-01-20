@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_project/core/store.dart';
 import 'package:test_project/models/cart.dart';
 import 'package:test_project/widgets/themes.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -29,13 +30,19 @@ class CartTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _cart = CartModel();
+  final _cart = (VxState.store as MyStore).cart;
     return SizedBox(
       height: 200,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-        "\$${_cart.totalPrice}".text.xl5.color(context.accentColor).make(),
+        //VxBuilder - access to store, VxNotifier - access to context, VxConsumer - mix
+        VxConsumer(
+          notifications: {},
+          builder: ((context, store, status) {
+          return "\$${_cart.totalPrice}".text.xl5.color(context.accentColor).make();
+        }),
+         mutations: {RemoveMutation}),
         30.widthBox,
         ElevatedButton(
         onPressed: (() {
@@ -51,26 +58,19 @@ class CartTotal extends StatelessWidget {
   }
 }
 
-class CartList extends StatefulWidget {
-  const CartList({super.key});
-
-  @override
-  State<CartList> createState() => _CartListState();
-}
-
-class _CartListState extends State<CartList> {
-  final _cart = CartModel();
-
+class CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+      VxState.watch(context, on: [RemoveMutation]);
+      final _cart = (VxState.store as MyStore).cart;
+
     return _cart.items.isEmpty ? "Nothing to show".text.xl3.make() : ListView.builder(
       itemCount: _cart.items?.length,
       itemBuilder: ((context, index) => ListTile(
         leading: const Icon(Icons.done),
         trailing: IconButton(
           onPressed: (() {
-            _cart.remove(_cart.items[index]);
-            setState(() { });
+            RemoveMutation(_cart.items[index]);
           }),
           icon: const Icon(Icons.remove_circle_outline
           ),
